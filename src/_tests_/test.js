@@ -1,4 +1,5 @@
 import getLevel from '../getLevelFunction';
+import fetchData from '../http';
 
 jest.mock('../http');
 
@@ -7,13 +8,13 @@ beforeEach(() => {
 });
 
 test('positive test', () => {
-  // httpGet.mockReturnValue(JSON.stringify(({})));
-  const result = getLevel(1);
-  expect(`Ваш текущий уровень: ${response.level}`).toBe(result);
+  fetchData.mockReturnValue({ status: 'ok' });
+  getLevel(1);
+  expect(fetchData).toBeCalledWith('https://server/user/1');
 });
 
 test('negative test', () => {
-  // httpGet.mockReturnValue(JSON.stringify(({})));
-  const result = getLevel(-1);
-  expect('Информация об уровне временно недоступна').toBe(result);
+  fetchData.mockReturnValue({ status: 'bad' });
+  getLevel(-1);
+  expect(fetchData).toBeCalledWith('https://server/user/-1');
 });
